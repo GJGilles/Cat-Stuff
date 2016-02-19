@@ -16,6 +16,10 @@ var buildTask = function() {
     gulp.src('src/index.html')
     .pipe(gulp.dest('Debug'));
     
+    //Copy lib
+    gulp.src('src/lib/**')
+    .pipe(gulp.dest('Debug/lib'));
+    
     //Compile LESS files
     gulp.src('src/**/*.less')
     .pipe(less({
@@ -36,9 +40,8 @@ var buildTask = function() {
     }));
     
     //Compile TypeScript files
-    gulp.src('src/**/*.ts')
+    gulp.src(['src/angular_module.ts', 'src/**/*.ts'])
     .pipe(ts({
-        noImplicitAny: true,
         out: 'scripts.js'
     }))
     .pipe(concat('scripts.js'))

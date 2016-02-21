@@ -19,8 +19,6 @@
   "dependencies": {
     "commander": "^2.9.0",
     "facebook-chat-api": "^1.0.6",
-    "jquery": "^2.2.0",
-    "jsdom": "^8.0.4",
     "require": "^2.4.20",
     "xmlhttprequest": "^1.8.0"
   }

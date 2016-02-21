@@ -1,7 +1,6 @@
 var program = require('commander');
 var login = require('facebook-chat-api');
-var jsdom = require('jsdom');
-var $ = require('jQuery');
+var http = require('http');
 
 program
   .version('0.0.1')
@@ -14,13 +13,16 @@ program
 var sendInterval = setInterval(function() {
     login({email: program.username, password: program.password}, function (err, api) {
         if(err) return console.error(err);
-        $.get('http://catfacts-api.appspot.com/api/facts', function (data) {
-            api.sendMessage({
-                body: data.facts[0]
-            }, parseInt(program.id), function (err, messageInfo) {
-                if(err) return console.error(err);
-                console.log('success - ' + messageInfo.timestamp);
+        http.request({host: 'www.catfacts-api.appspot.com', path: '/api/facts', method: 'GET'}, function (res) {
+            res.setEncoding('utf8');
+            res.on('data', function (chunk) {
+                api.sendMessage({
+                    body: JSON.parse(chunk).facts[0]
+                }, parseInt(program.id), function (err, messageInfo) {
+                    if(err) return console.error(err);
+                    console.info('success - ' + messageInfo.timestamp);
+                });
             });
-        });
+        }).end();
     });
 }, program.interval)
